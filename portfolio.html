@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfólio | Wagner Monteiro</title>
+  <style>
+    :root {
+      --bg: #090a09;
+      --panel: #151715;
+      --line: rgba(255, 255, 255, 0.14);
+      --text: #f5f4ed;
+      --muted: #a9aaa3;
+      --accent: #d6e5cf;
+      --green: #9bdc4b;
+    }
+
+    * { box-sizing: border-box; margin: 0; }
+
+    body {
+      min-height: 100vh;
+      padding: 20px;
+      background: radial-gradient(circle at 75% 35%, rgba(70, 103, 70, 0.2), transparent 28%), var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+
+    main { width: min(100%, 1120px); margin: 0 auto; }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 92px;
+      padding: 12px 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(21, 23, 21, 0.82);
+    }
+
+    .nav-brand {
+      color: var(--accent);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    nav ul {
+      display: flex;
+      gap: 26px;
+      list-style: none;
+    }
+
+    nav a {
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-decoration: none;
+    }
+
+    nav a:hover { color: var(--accent); }
+
+    .back {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: center;
+      gap: 70px;
+      min-height: 430px;
+      margin-bottom: 76px;
+    }
+
+    .eyebrow { color: var(--muted); font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; }
+    h1 { margin: 14px 0 20px; font-size: clamp(3.6rem, 8vw, 7.4rem); line-height: 0.9; letter-spacing: -0.05em; }
+    .hero-description { max-width: 540px; color: var(--muted); font-size: 1.05rem; line-height: 1.6; }
+
+    .hero-actions { display: flex; gap: 12px; margin-top: 30px; }
+    .hero-actions a { padding: 13px 20px; border-radius: 4px; text-decoration: none; font-weight: 700; }
+    .primary-action { background: var(--green); color: #14210c; box-shadow: 0 0 28px rgba(155, 220, 75, 0.22); }
+    .secondary-action { border: 1px solid var(--line); color: var(--text); }
+
+    .portrait-frame { position: relative; justify-self: center; width: min(100%, 360px); aspect-ratio: 1; }
+    .portrait-frame::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: #29443d; transform: rotate(8deg) scale(0.96); }
+    .portrait { position: relative; width: 100%; height: 100%; border: 8px solid #29443d; border-radius: 50%; object-fit: cover; object-position: center 18%; }
+
+    .worked-with { margin-bottom: 64px; color: var(--muted); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; }
+    .about { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 32px; margin-bottom: 72px; }
+    .about h2, .experience h2 { font-size: 2rem; }
+    .about p { color: var(--muted); line-height: 1.7; }
+    .education { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); }
+    .education-heading { margin-bottom: 14px; font-size: 1.2rem; }
+    .education h3 { margin-bottom: 6px; font-size: 1.05rem; }
+    .education p { color: var(--muted); line-height: 1.5; }
+    .education small { display: block; margin-top: 8px; color: var(--green); }
+    .skills { display: flex; flex-wrap: wrap; gap: 8px; align-content: start; }
+    .skill { padding: 9px 12px; border: 1px solid var(--line); border-radius: 999px; color: var(--accent); font-size: 0.82rem; }
+    .experience { margin-bottom: 72px; }
+    .experience-list { display: grid; gap: 12px; margin-top: 18px; }
+    .experience-item { display: grid; grid-template-columns: 180px 1fr; gap: 24px; padding: 20px 0; border-top: 1px solid var(--line); }
+    .experience-item small { color: var(--green); }
+    .experience-item h3 { margin-bottom: 8px; }
+    .experience-item p { color: var(--muted); line-height: 1.55; }
+    .projects { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+    .project { padding: 24px; border: 1px solid var(--line); border-radius: 16px; background: rgba(28, 31, 30, 0.92); }
+    .project h2 { margin-bottom: 10px; font-size: 1.25rem; }
+    .project p { color: var(--muted); line-height: 1.55; }
+    .tag { display: inline-block; margin-top: 22px; color: var(--green); font-size: 0.82rem; }
+    .project-link { display: block; margin-top: 18px; color: var(--accent); font-weight: 700; text-decoration: none; }
+
+    .contact {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 64px;
+    }
+
+    .contact a {
+      display: block;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--text);
+      text-decoration: none;
+      background: rgba(21, 23, 21, 0.82);
+    }
+
+    .contact a:hover { border-color: var(--accent); }
+    .contact small { display: block; margin-bottom: 8px; color: var(--muted); }
+
+    footer { margin-top: 72px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.85rem; }
+
+    @media (max-width: 620px) {
+      body { padding: 14px 12px; }
+      nav { margin-bottom: 48px; padding: 10px 12px; }
+      nav ul { display: none; }
+      .hero { grid-template-columns: 1fr; gap: 44px; min-height: auto; margin-bottom: 56px; }
+      .hero-copy { order: 2; }
+      .portrait-frame { order: 1; width: min(78vw, 300px); }
+      h1 { font-size: clamp(3.4rem, 18vw, 5rem); }
+      .hero-actions { flex-wrap: wrap; }
+      .worked-with { margin-bottom: 40px; }
+      .about { grid-template-columns: 1fr; gap: 18px; margin-bottom: 52px; }
+      .experience { margin-bottom: 52px; }
+      .experience-item { grid-template-columns: 1fr; gap: 8px; }
+      .projects { grid-template-columns: 1fr; }
+      .contact { grid-template-columns: 1fr; margin-top: 44px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <nav>
+      <span class="nav-brand">WM</span>
+      <ul>
+        <li><a href="#inicio">Início</a></li>
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#experiencia">Experiência</a></li>
+        <li><a href="#projetos">Projetos</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
+      <a class="back" href="index.html">Acessar Finance</a>
+    </nav>
+
+    <section id="inicio" class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Desenvolvedor</p>
+        <h1>Wagner<br>Monteiro.</h1>
+        <p class="hero-description">Construo experiências digitais simples, funcionais e pensadas para resolver problemas reais.</p>
+        <div class="hero-actions">
+          <a class="primary-action" href="#projetos">Ver projetos</a>
+          <a class="secondary-action" href="#contato">Entrar em contato</a>
+        </div>
+      </div>
+      <div class="portrait-frame">
+        <img class="portrait" src="perfil.jpg.jpeg" alt="Foto de Wagner Monteiro">
+      </div>
+    </section>
+
+    <p class="worked-with">Projetos e tecnologias</p>
+
+    <section id="sobre" class="about">
+      <h2>Sobre mim</h2>
+      <div>
+        <p>Atuo com suporte técnico, atendimento e rotinas operacionais em infraestrutura de telecomunicações. Tenho experiência com recepção e tratativa de chamados, liberação de acesso a sites de Estações Rádio Base e acompanhamento de incidentes de conectividade e rede.</p>
+        <div class="education">
+          <h3 class="education-heading">Formação acadêmica</h3>
+          <h3>Redes de Computadores</h3>
+          <p>Estácio</p>
+          <small>Graduação</small>
+        </div>
+        <div class="skills" style="margin-top: 22px;">
+          <span class="skill">Suporte técnico</span>
+          <span class="skill">Redes</span>
+          <span class="skill">Hardware</span>
+          <span class="skill">Backoffice</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="experiencia" class="experience">
+      <p class="eyebrow">Trajetória</p>
+      <h2>Experiência</h2>
+      <div class="experience-list">
+        <article class="experience-item">
+          <small>2023 — presente</small>
+          <div><h3>Operador de Telemarketing · Vermont XCenter</h3><p>Atendimento e suporte a chamados técnicos, liberação de acesso a sites operacionais e apoio a técnicos de campo na resolução de falhas de conectividade e rede.</p></div>
+        </article>
+        <article class="experience-item">
+          <small>2019 — 2022</small>
+          <div><h3>Operador de Telemarketing 2 · Vermont XCenter</h3><p>Atendimento ao cliente, negociação, vendas e tratamento de pendências operacionais em rotinas de backoffice.</p></div>
+        </article>
+        <article class="experience-item">
+          <small>2018 — 2019</small>
+          <div><h3>Jovem Aprendiz · Casas Bahia</h3><p>Atendimento ao cliente e apoio no controle, conferência e organização de estoque.</p></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="projetos" class="projects" aria-label="Projetos">
+      <article class="project">
+        <h2>Finance Dashboard</h2>
+        <p>Aplicação para organizar saldo, metas financeiras, transações e progresso pessoal.</p>
+        <span class="tag">Projeto pessoal · Em desenvolvimento</span>
+        <a class="project-link" href="index.html">Abrir projeto →</a>
+      </article>
+    </section>
+
+    <section id="contato" class="contact" aria-label="Contato">
+      <a href="mailto:wagnersilva898@gmail.com">
+        <small>E-mail</small>
+        wagnersilva898@gmail.com
+      </a>
+      <a href="tel:+5511949389247">
+        <small>Telefone</small>
+        (11) 94938-9247
+      </a>
+      <a href="https://wa.me/5511949389247" target="_blank" rel="noopener noreferrer">
+        <small>WhatsApp</small>
+        Falar comigo pelo WhatsApp
+      </a>
+    </section>
+
+    <footer>Desenvolvido por Wagner Monteiro · Finance Dashboard</footer>
+  </main>
+</body>
+</html>

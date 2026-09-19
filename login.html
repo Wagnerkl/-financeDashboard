@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-page">
+  <main class="login-layout">
+    <section class="login-intro">
+      <div class="brand-mark">F</div>
+      <p class="eyebrow">Finance</p>
+      <h1>Organize suas metas financeiras.</h1>
+      <p>Acompanhe seu saldo, planeje compras e veja seu progresso em um só lugar.</p>
+      <p class="developer-credit">Desenvolvido por <strong>Wagner Monteiro</strong></p>
+    </section>
+
+    <section class="login-box" aria-labelledby="login-title">
+      <p class="eyebrow">Acesso seguro</p>
+      <h2 id="login-title">Entrar na sua conta</h2>
+
+      <form id="loginForm">
+        <label for="email">E-mail</label>
+        <input id="email" type="email" placeholder="voce@email.com" autocomplete="email" required>
+
+        <label for="senha">Senha</label>
+        <input id="senha" type="password" placeholder="Digite sua senha" autocomplete="current-password" required>
+
+        <label class="remember-option" for="lembrarAcesso">
+          <input id="lembrarAcesso" type="checkbox" checked>
+          <span>Lembrar meu acesso</span>
+        </label>
+
+        <button id="btnLogin" type="submit">Entrar</button>
+      </form>
+
+      <p id="msg" class="login-message" role="alert" aria-live="polite"></p>
+      <p class="login-switch">
+        <span id="switchText">Ainda não possui uma conta?</span>
+        <button id="btnAlternarCadastro" class="link-btn" type="button">Criar usuário</button>
+      </p>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA0QazrD0Lt3jzaRPnW4hN9YS4xGT2u9LE",
+      authDomain: "wagner-ae15e.firebaseapp.com",
+      projectId: "wagner-ae15e",
+      storageBucket: "wagner-ae15e.firebasestorage.app",
+      messagingSenderId: "987453479711",
+      appId: "1:987453479711:web:288a24444437e9cab22e2a",
+      measurementId: "G-J4L49DWW0Y"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const emailInput = document.getElementById("email");
+    const lembrarInput = document.getElementById("lembrarAcesso");
+    const emailSalvo = localStorage.getItem("financeRememberedEmail");
+
+    if (emailSalvo) {
+      emailInput.value = emailSalvo;
+    }
+
+    setPersistence(
+      auth,
+      localStorage.getItem("financeRememberAccess") === "false"
+        ? browserSessionPersistence
+        : browserLocalPersistence
+    ).catch((error) => console.error("Erro ao configurar persistência:", error));
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        if (user.emailVerified) {
+          window.location.href = "index.html";
+        }
+      }
+    });
+
+    let modoCadastro = false;
+
+    document.getElementById("btnAlternarCadastro").addEventListener("click", () => {
+      modoCadastro = !modoCadastro;
+      document.getElementById("login-title").textContent = modoCadastro ? "Criar sua conta" : "Entrar na sua conta";
+      document.getElementById("btnLogin").textContent = modoCadastro ? "Criar conta" : "Entrar";
+      document.getElementById("switchText").textContent = modoCadastro ? "Já possui uma conta?" : "Ainda não possui uma conta?";
+      document.getElementById("btnAlternarCadastro").textContent = modoCadastro ? "Entrar" : "Criar usuário";
+      document.getElementById("senha").setAttribute("autocomplete", modoCadastro ? "new-password" : "current-password");
+      document.getElementById("msg").textContent = "";
+    });
+
+    document.getElementById("loginForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const email = document.getElementById("email").value;
+      const senha = document.getElementById("senha").value;
+      const msg = document.getElementById("msg");
+      const botao = document.getElementById("btnLogin");
+      const lembrarAcesso = document.getElementById("lembrarAcesso").checked;
+
+      localStorage.setItem("financeRememberAccess", String(lembrarAcesso));
+      if (lembrarAcesso) {
+        localStorage.setItem("financeRememberedEmail", email);
+      } else {
+        localStorage.removeItem("financeRememberedEmail");
+      }
+
+      msg.textContent = "";
+      botao.disabled = true;
+      botao.textContent = modoCadastro ? "Criando..." : "Entrando...";
+
+      try {
+        await setPersistence(auth, lembrarAcesso ? browserLocalPersistence : browserSessionPersistence);
+
+        if (modoCadastro) {
+          if (senha.length < 6) {
+            throw new Error("A senha precisa ter pelo menos 6 caracteres.");
+          }
+          const credential = await createUserWithEmailAndPassword(auth, email, senha);
+          await sendEmailVerification(credential.user);
+          await signOut(auth);
+          msg.textContent = "Enviamos um link de verificação para seu e-mail. Confirme antes de entrar.";
+          msg.classList.add("success-message");
+          return;
+        } else {
+          const credential = await signInWithEmailAndPassword(auth, email, senha);
+          if (!credential.user.emailVerified) {
+            await sendEmailVerification(credential.user);
+            await signOut(auth);
+            throw new Error("Seu e-mail ainda não foi confirmado. Enviamos um novo link de verificação.");
+          }
+        }
+        window.location.href = "index.html";
+      } catch (error) {
+        msg.textContent = modoCadastro
+          ? (error.code === "auth/email-already-in-use" ? "Este e-mail já está cadastrado." : error.message)
+          : (error.message || "E-mail ou senha inválidos.");
+        msg.classList.remove("success-message");
+        console.error(error);
+      } finally {
+        botao.disabled = false;
+        botao.textContent = modoCadastro ? "Criar conta" : "Entrar";
+      }
+    });
+  </script>
+</body>
+</html>

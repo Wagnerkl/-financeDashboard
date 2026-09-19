@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finance Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-pending">
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">F</div>
+        <div>
+          <p class="eyebrow">Finance</p>
+          <h1>Finance Dashboard</h1>
+          <p class="developer-credit">Desenvolvido por Wagner Monteiro</p>
+          <span id="adminBadge" class="admin-badge" hidden>Administrador</span>
+        </div>
+      </div>
+
+      <div class="portfolio-qr" aria-label="QR Code do portfólio">
+        <div id="portfolioQrCode"></div>
+        <div class="portfolio-qr-copy">
+          <span>Portfólio do desenvolvedor</span>
+          <a href="portfolio.html">Abrir portfólio</a>
+        </div>
+      </div>
+
+      <button id="logoutBtn" class="logout-btn" type="button">Sair</button>
+    </header>
+
+    <main class="dashboard">
+      <section class="hero-card">
+        <div class="hero-copy">
+          <p class="eyebrow">Saldo disponível</p>
+          <h2 id="saldoDisponivel">R$ 0,00</h2>
+          <span>Seu progresso financeiro em um só lugar.</span>
+        </div>
+
+        <div class="hero-stats">
+          <div>
+            <span>Salário atual</span>
+            <strong id="salarioAtual">R$ 0,00</strong>
+          </div>
+          <div>
+            <span>Reservado</span>
+            <strong id="reservadoTotal">R$ 0,00</strong>
+          </div>
+          <div>
+            <span>Metas</span>
+            <strong id="metaTotal">0</strong>
+          </div>
+        </div>
+      </section>
+
+      <section id="adminPanel" class="panel admin-panel" hidden>
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Área restrita</p>
+            <h3>Configurações do aplicativo</h3>
+          </div>
+          <span class="admin-badge">Administrador</span>
+        </div>
+        <p class="admin-help">Essas opções alteram apenas a aparência desta instalação.</p>
+        <div class="admin-controls">
+          <label for="corPrincipal">Cor principal</label>
+          <input id="corPrincipal" type="color" value="#d6e5cf">
+          <label for="corDestaque">Cor de destaque</label>
+          <input id="corDestaque" type="color" value="#c8e6b8">
+          <button id="btnRestaurarCores" type="button" class="secondary-btn">Restaurar cores</button>
+          <button id="btnExportarDados" type="button" class="secondary-btn">Exportar dados</button>
+        </div>
+        <p class="admin-user">Administrador conectado: <strong id="adminEmail"></strong></p>
+        <p class="admin-help">O gerenciamento de outros usuários será conectado ao Firebase Admin SDK quando o backend estiver configurado.</p>
+      </section>
+
+      <section class="actions-grid">
+        <div class="panel action-group">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">Movimentação</p>
+              <h3>Dinheiro disponível</h3>
+            </div>
+            <span class="section-icon">R$</span>
+          </div>
+
+          <label for="valorSalario">Salário atual</label>
+          <div class="input-row">
+            <input id="valorSalario" type="number" placeholder="R$ 3.500,00" min="0" step="0.01">
+            <button id="btnRegistrarSalario">Atualizar</button>
+          </div>
+
+          <label for="valorSaldo">Adicionar dinheiro</label>
+          <select id="categoriaTransacao" class="meta-select">
+            <option value="Salário">Salário</option>
+            <option value="Renda extra">Renda extra</option>
+            <option value="Compra">Compra</option>
+            <option value="Conta">Conta</option>
+            <option value="Lazer">Lazer</option>
+            <option value="Outro">Outro</option>
+          </select>
+          <div class="input-row">
+            <input id="valorSaldo" type="number" placeholder="R$ 150,00" min="0" step="0.01">
+            <button id="btnAdicionarSaldo">Adicionar</button>
+          </div>
+
+          <label for="valorRetirarSaldo">Retirar para compra ou despesa</label>
+          <div class="input-row">
+            <input id="valorRetirarSaldo" type="number" placeholder="R$ 80,00" min="0" step="0.01">
+            <button id="btnRetirarSaldo" class="danger-btn">Retirar</button>
+          </div>
+        </div>
+
+        <div class="panel action-group">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">Planejamento</p>
+              <h3>Movimentar metas</h3>
+            </div>
+            <span class="section-icon">*</span>
+          </div>
+
+          <label for="metaSelecionada">Guardar na meta</label>
+          <select id="metaSelecionada" class="meta-select">
+            <option value="">Selecione a meta</option>
+          </select>
+          <div class="input-row">
+            <input id="valorAdicionar" type="number" placeholder="R$ 120,00" min="0" step="0.01">
+            <button id="btnAdicionarMeta" class="success-btn">Guardar</button>
+          </div>
+
+          <label for="metaRetirada">Retirar da meta</label>
+          <select id="metaRetirada" class="meta-select">
+            <option value="">Selecione a meta</option>
+          </select>
+          <div class="input-row">
+            <input id="valorRemover" type="number" placeholder="R$ 80,00" min="0" step="0.01">
+            <button id="btnRetirarMeta" class="danger-btn">Retirar</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel meta-form">
+        <h3>Nova meta</h3>
+        <input id="nomeMeta" type="text" placeholder="Ex: Notebook gamer">
+        <input id="valorMeta" type="number" placeholder="Valor da meta">
+
+        <div class="imagem-row">
+          <input id="imagemMeta" type="url" placeholder="URL da imagem">
+          <button type="button" class="secondary-btn" onclick="buscarImagemGoogle()">Buscar URL</button>
+          <button id="btnEscolherImagem" class="file-btn" type="button">Escolher imagem</button>
+          <input id="fileImagem" type="file" accept="image/*" hidden>
+        </div>
+
+        <button id="btnCriarMeta">Criar meta</button>
+      </section>
+
+      <section class="metas-section">
+        <div class="section-head">
+          <h3>Minhas metas</h3>
+          <span id="metaTexto">0 metas</span>
+        </div>
+        <div id="metas" class="metas-grid"></div>
+      </section>
+
+      <section class="panel history-panel">
+        <div class="section-head">
+          <h3>Histórico</h3>
+          <div class="history-filters">
+            <select id="filtroTipo" aria-label="Filtrar por tipo">
+              <option value="todos">Todos</option>
+              <option value="entrada">Entradas</option>
+              <option value="saida">Saídas</option>
+            </select>
+            <select id="filtroCategoria" aria-label="Filtrar por categoria">
+              <option value="todas">Todas as categorias</option>
+              <option value="Salário">Salário</option>
+              <option value="Renda extra">Renda extra</option>
+              <option value="Compra">Compra</option>
+              <option value="Conta">Conta</option>
+              <option value="Lazer">Lazer</option>
+              <option value="Meta">Meta</option>
+              <option value="Outro">Outro</option>
+            </select>
+          </div>
+        </div>
+        <div id="historico" class="historico-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA0QazrD0Lt3jzaRPnW4hN9YS4xGT2u9LE",
+      authDomain: "wagner-ae15e.firebaseapp.com",
+      projectId: "wagner-ae15e",
+      storageBucket: "wagner-ae15e.firebasestorage.app",
+      messagingSenderId: "987453479711",
+      appId: "1:987453479711:web:288a24444437e9cab22e2a",
+      measurementId: "G-J4L49DWW0Y"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const adminEmail = "wagnersilva898@gmail.com";
+
+    let sessaoVerificada = false;
+    onAuthStateChanged(auth, (user) => {
+      if (sessaoVerificada) return;
+      sessaoVerificada = true;
+
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      const isAdmin = user.email.toLowerCase() === adminEmail;
+      window.isAdmin = isAdmin;
+      window.financeUser = user;
+      window.loadCloudState = async () => {
+        const snapshot = await getDoc(doc(db, "users", user.uid, "finance", "state"));
+        return snapshot.exists() ? snapshot.data() : null;
+      };
+      window.saveCloudState = (state) => setDoc(doc(db, "users", user.uid, "finance", "state"), state, { merge: false });
+      document.getElementById("adminBadge").hidden = !isAdmin;
+      document.getElementById("adminPanel").hidden = !isAdmin;
+      document.getElementById("adminEmail").textContent = isAdmin ? user.email : "";
+      document.body.classList.remove("auth-pending");
+      document.body.dispatchEvent(new CustomEvent("auth-ready"));
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "login.html";
+    });
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
